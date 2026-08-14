@@ -134,3 +134,14 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+/src/generated/prisma
+
+/src/generated/prisma
+
+.agents/
+.claude/
+.windsurf/
+
+prisma/*.db
+prisma/*.db-journal
