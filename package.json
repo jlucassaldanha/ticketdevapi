@@ -1,0 +1,31 @@
+{
+  "name": "ticketdevapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/index.ts",
+    "build": "tsc",
+    "start": "node --env-file=.env dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlucassaldanha/ticketdevapi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jlucassaldanha/ticketdevapi/issues"
+  },
+  "homepage": "https://github.com/jlucassaldanha/ticketdevapi#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}
