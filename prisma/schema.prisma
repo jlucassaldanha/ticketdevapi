@@ -17,7 +17,7 @@ model User {
   name      String
   password  String
   role      String
-  createdAd DateTime @default(now())
+  createdAt DateTime @default(now())
 
   events   Event[]
   tickets  Ticket[]

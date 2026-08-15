@@ -1,26 +1,25 @@
+import { IAuthService } from '../interfaces/auth-service.interface';
+import { IUserRepository } from '../interfaces/user-repository.interface';
 import { UserRepository } from '../repositories/user.repository';
-import { AuthResponse, LoginInput, RegisterInput } from '../types/user';
+import { AuthResponse, LoginInput, RegisterInput, UserWithoutPassword } from '../types/user';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-export class AuthService {
-  private userRepository: UserRepository;
+export class AuthService implements IAuthService {
 
-  constructor() {
-    this.userRepository = new UserRepository();
-  }
+  constructor(private userRepository: IUserRepository) { }
 
-  async register(data: RegisterInput) {
-    const userExists = await this.userRepository.findByEmail(data.email)
+  async register(input: RegisterInput): Promise<UserWithoutPassword> {
+    const userExists = await this.userRepository.findByEmail(input.email)
 
     if (userExists) {
       throw new Error('EMAIL_ALREADY_EXISTS')
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10)
+    const hashedPassword = await bcrypt.hash(input.password, 10)
 
     const newUser = await this.userRepository.create({
-      ...data,
+      ...input,
       password: hashedPassword,
     })
 
@@ -28,14 +27,14 @@ export class AuthService {
     return userWithoutPassword
   }
 
-  async login(data: LoginInput): Promise<AuthResponse> {
-    const user = await this.userRepository.findByEmail(data.email)
+  async login(input: LoginInput): Promise<AuthResponse> {
+    const user = await this.userRepository.findByEmail(input.email)
 
     if (!user) {
       throw new Error('INVALID_CREDENTIALS')
     }
 
-    const isPasswordValid = await bcrypt.compare(data.password, user.password)
+    const isPasswordValid = await bcrypt.compare(input.password, user.password)
 
     if (!isPasswordValid) {
       throw new Error('INVALID_CREDENTIALS')

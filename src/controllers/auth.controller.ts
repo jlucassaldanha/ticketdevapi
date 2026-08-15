@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import { UserRole } from '../types/user';
-import { AuthService } from '../services/auth.service';
+import { IAuthService } from '../interfaces/auth-service.interface';
 
-const authService = new AuthService()
 
 export class AuthController {
+  constructor(private authService: IAuthService) { }
+
   async register(req: Request, res: Response) {
     try {
       const { email, name, password, role } = req.body;
@@ -18,7 +19,7 @@ export class AuthController {
         return res.status(400).json({ error: "Cargo inválido." })
       }
 
-      const user = await authService.register({
+      const user = await this.authService.register({
         name, 
         email, 
         password, 
@@ -43,7 +44,7 @@ export class AuthController {
         return res.status(400).json({ error: 'E-mail e senha são obrigatórios' })
       }
 
-      const result = await authService.login({ email, password })
+      const result = await this.authService.login({ email, password })
 
       return res.status(200).json(result)
     } catch (error: any) {

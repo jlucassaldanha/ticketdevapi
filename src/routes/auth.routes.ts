@@ -2,9 +2,14 @@ import { Router } from 'express';
 import { AuthController } from '../controllers/auth.controller';
 import { authMiddleware, roleMiddleware } from '../middlewares/auth.middleware';
 import { AuthenticatedRequest } from '../types/user';
+import { UserRepository } from '../repositories/user.repository';
+import { AuthService } from '../services/auth.service';
 
 const authRouter = Router();
-const authController = new AuthController();
+
+const userRepository = new UserRepository()
+const authService = new AuthService(userRepository)
+const authController = new AuthController(authService);
 
 authRouter.post('/register', (req, res) => authController.register(req, res))
 authRouter.post('/login', (req, res) => authController.login(req, res)) 
