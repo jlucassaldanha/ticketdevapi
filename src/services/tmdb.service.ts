@@ -1,6 +1,7 @@
+import { ITMDBService } from "../interfaces/tmdb-service.interface";
 import { TMDBMovie } from "../types/tmdb";
 
-export class TMDBService {
+export class TMDBService implements ITMDBService {
 	private apiKey: string
 	private baseUrl = 'https://api.themoviedb.org/3'
 
