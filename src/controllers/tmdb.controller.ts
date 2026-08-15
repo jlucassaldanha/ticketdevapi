@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { TMDBService } from "../services/tmdb.service";
-
-const tmdbService = new TMDBService()
+import { ITMDBService } from "../interfaces/tmdb-service.interface";
 
 export class TMDBController {
+  constructor(private tmdbService: ITMDBService) { }
+
 	async getPopular(req: Request, res: Response) {
 		try {
-      const movies = await tmdbService.getPopularMovies()
+      const movies = await this.tmdbService.getPopularMovies()
       return res.status(200).json(movies)
     } catch (error: any) {
       return res.status(500).json({ error: 'Falha ao conectar com o catálogo de filmes.' })
@@ -21,7 +21,7 @@ export class TMDBController {
         return res.status(400).json({ error: 'O parâmetro "query" é obrigatório e dev ser uma string.' })
       }
 
-      const movies = await tmdbService.searchMovies(query)
+      const movies = await this.tmdbService.searchMovies(query)
       return res.status(200).json(movies)
     } catch (error: any) {
       return res.status(500).json({ error: 'Falha ao pesquisar no catálogo de filmes.' })

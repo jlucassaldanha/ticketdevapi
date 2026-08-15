@@ -9,53 +9,57 @@ export class TMDBService implements ITMDBService {
 		this.apiKey = process.env.TMDB_API_KEY || ''
 	}
 
-	private async request<T>(endpoint: string, queryParams = ''): Promise<T> {
-		if (!this.apiKey || this.apiKey === 'cole_sua_api_key_do_tmdb_aqui') {
-			return this.getMockData(endpoint) as T;
+  async getPopularMovies(): Promise<TMDBMovie[]> {
+    if (!this.apiKey || this.apiKey === 'cole_sua_api_key_do_tmdb_aqui') {
+			return this.getMockData();
 		}
 
-    const url = `${this.baseUrl}${endpoint}?api_key=${this.apiKey}&language=pt-BR${queryParams}`
+    const url = `${this.baseUrl}/movie/popular?api_key=${this.apiKey}&language=pt-BR`
     const response = await fetch(url)
 
     if (!response.ok) {
       throw new Error(`Erro na integração com TMDb: ${response.statusText}`)
     }
 
-    return response.json() as Promise<T>
-	}
-
-  async getPopularMovies(): Promise<TMDBMovie[]> {
-    const data = await this.request<{ results: TMDBMovie[] }>('movie/popular')
+    const data = await response.json() as { results: TMDBMovie[] }
     return data.results
   }
 
   async searchMovies(query: string): Promise<TMDBMovie[]> {
+    if (!this.apiKey || this.apiKey === 'cole_sua_api_key_do_tmdb_aqui') {
+			return this.getMockData();
+		}
+
     const encodedQuery = encodeURIComponent(query)
-    const data = await this.request<{ results: TMDBMovie[] }>('/search/movie', `&query=${encodedQuery}`)
+    const url = `${this.baseUrl}/search/movie?api_key=${this.apiKey}&language=pt-BR&query=${encodedQuery}`
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar filme no TMDb: ${response.statusText}`)
+    }
+
+    const data = await response.json() as { results: TMDBMovie[] }
     return data.results
   }
   
-  private getMockData(endpoint: string): any {
-    const mockMovies = [
+  private getMockData(): TMDBMovie[] {
+    return [
       {
         id: 101,
         title: "Matrix: The Developer Code",
         overview: "Um programador sênior descobre que o TypeScript que ele programa é na verdade uma simulação realista.",
         poster_path: null,
-        release_date: "2026-08-14"
+        release_date: "2026-08-14",
+        genre_ids: []
       },
       {
         id: 102,
         title: "Prisma 7: A Revolução do Rust-Free",
         overview: "A emocionante jornada de um banco de dados que se libertou dos motores pesados para rodar de forma ultra-rápida no Edge.",
         poster_path: null,
-        release_date: "2026-05-10"
+        release_date: "2026-05-10",
+        genre_ids: []
       }
     ];
-
-    if (endpoint.includes('/search/movie')) {
-      return { results: mockMovies };
-    }
-    return { results: mockMovies };
   }
 }
