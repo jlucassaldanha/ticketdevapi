@@ -1,3 +1,5 @@
+import { Request } from "express"
+
 export type UserRole = 'ORGANIZADOR' | 'CLIENTE' | 'PORTARIA'
 
 export interface RegisterInput {
@@ -23,4 +25,11 @@ export interface UserWithoutPassword {
 export interface AuthResponse {
   user: UserWithoutPassword
   token: string
+}
+
+export interface AuthenticatedRequest extends Request {
+  user?: {
+    id: string
+    role: UserRole
+  }
 }

@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import authRouter from './routes/auth.routes.js';
 import catalogRouter from './routes/catalog.routes.js';
-
 const app = express();
 const PORT = process.env.PORT;
 
