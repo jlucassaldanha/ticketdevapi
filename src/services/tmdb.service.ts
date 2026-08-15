@@ -41,6 +41,23 @@ export class TMDBService implements ITMDBService {
     const data = await response.json() as { results: TMDBMovie[] }
     return data.results
   }
+
+  async getMovieById(id: number): Promise<TMDBMovie> {
+    if (!this.apiKey || this.apiKey === 'cole_sua_api_key_do_tmdb_aqui') {
+      const mocks = this.getMockData()
+      const mock = mocks.find(m => m.id === id) || mocks[0]
+      return mock
+    }
+
+    const url = `${this.baseUrl}/movie/${id}?api_key=${this.apiKey}&language=pt-BR`
+    const response = await fetch(url)
+
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar detalhes do filme no TMDb: ${response.statusText}`)
+    }
+
+    return response.json() as Promise<TMDBMovie>
+  }
   
   private getMockData(): TMDBMovie[] {
     return [
