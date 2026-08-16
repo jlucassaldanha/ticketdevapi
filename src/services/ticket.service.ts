@@ -46,4 +46,12 @@ export class TicketService implements ITicketService {
   async getClientTickets(clientId: string): Promise<Ticket[]> {
     return this.ticketRepository.findByClientId(clientId)
   }
+
+  async getTicketByHash(secureHash: string): Promise<Ticket | null> {
+    const ticket = await this.ticketRepository.findBySecureHash(secureHash)
+    if (!ticket) {
+      throw new Error('TICKET_NOT_FOUND')
+    }
+    return ticket
+  }
 }

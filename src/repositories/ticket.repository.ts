@@ -63,4 +63,27 @@ export class TicketRepository implements ITicketRepository {
       include: { event: true, client: true }
     })
   }
+
+  async findBySecureHash(secureHash: string): Promise<Ticket | null> {
+    return prisma.ticket.findUnique({
+      where: { secureHash },
+      include: {
+        event: true,
+        client: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        }
+      }
+    })
+  }
+
+  async updateStatus(id: string, status: string): Promise<Ticket> {
+    return prisma.ticket.update({
+      where: { id },
+      data: { status }
+    })
+  }
 }

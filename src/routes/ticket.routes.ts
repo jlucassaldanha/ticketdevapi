@@ -10,6 +10,7 @@ const ticketRepository = new TicketRepository()
 const ticketService = new TicketService(ticketRepository)
 const ticketController = new TicketController(ticketService)
 
+ticketRouter.get('/share/:secureHash', (req, res) => ticketController.share(req, res))
 ticketRouter.use(authMiddleware)
 
 ticketRouter.post(

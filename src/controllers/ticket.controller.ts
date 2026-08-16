@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { ITicketService } from "../interfaces/ticket-service.interface";
 import { AuthenticatedRequest } from "../types/user";
 
@@ -67,6 +67,28 @@ export class TicketController {
     } catch (error: any) {
       console.error('Erro ao buscar ingressos do cliente:', error)
       return res.status(500).json({ error: 'Erro interno ao buscar seus ingressos.' })
+    }
+  }
+
+  async share(req: Request, res: Response) {
+    try {
+      const { secureHash } = req.params
+
+      if (!secureHash) {
+        return res.status(400).json({ error: 'O hash do ingresso é obrigatório.' })
+      }
+
+      const ticket = await this.ticketService.getTicketByHash(secureHash as string)
+
+      return res.status(200).json({
+        message: 'Ingresso localizado com sucesso!',
+        ticket
+      })
+    } catch (error: any) {
+      if (error.message === 'TICKET_NOT_FOUND') {
+        return res.status(404).json({ error: 'Ingresso inválido ou inexistente.' })
+      }
+      return res.status(500).json({ error: 'Erro interno ao buscar o ingresso compartilhado.' })
     }
   }
 }
