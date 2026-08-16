@@ -20,7 +20,7 @@ export function authMiddleware(req: AuthenticatedRequest, res: Response, next: N
   try {
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'fallback_secret_ticked_dev'
+      process.env.JWT_SECRET || 'fallback_secret_ticket_dev'
     ) as { userId: string; role: UserRole}
 
     req.user = {
