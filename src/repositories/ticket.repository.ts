@@ -1,6 +1,6 @@
 import { Prisma, Ticket } from "@prisma/client";
 import { ITicketRepository } from "../interfaces/ticket-repository.interface";
-import { CreateTicketData } from "../types/ticket";
+import { CreateTicketData, TicketWithEvent } from "../types/ticket";
 import { prisma } from "../config/database";
 
 export class TicketRepository implements ITicketRepository {
@@ -64,7 +64,7 @@ export class TicketRepository implements ITicketRepository {
     })
   }
 
-  async findBySecureHash(secureHash: string): Promise<Ticket | null> {
+  async findBySecureHash(secureHash: string): Promise<TicketWithEvent | null> {
     return prisma.ticket.findUnique({
       where: { secureHash },
       include: {
@@ -77,7 +77,7 @@ export class TicketRepository implements ITicketRepository {
           }
         }
       }
-    })
+    }) as Promise<TicketWithEvent | null>
   }
 
   async updateStatus(id: string, status: string): Promise<Ticket> {
