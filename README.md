@@ -34,14 +34,21 @@ npx prisma generate
 
 ```
 
-**4. Aplicar as migrações existentes e popular o banco (Seed)**
+**4. Aplicar as migrações existentes (Seed)**
 
 ```bash
 npx prisma migrate dev
 
 ```
 
-**5. Iniciar o servidor em modo de desenvolvimento**
+**5. Popular banco de dados (Seed)**
+
+```bash
+npx tsx prisma/seed.ts
+
+```
+
+**6. Iniciar o servidor em modo de desenvolvimento**
 
 ```bash
 npm run dev
