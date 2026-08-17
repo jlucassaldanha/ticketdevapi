@@ -13,7 +13,7 @@ const gateController = new GateController(gateService)
 gateRouter.post(
   '/validate',
   authMiddleware,
-  roleMiddleware(['PORTARIA', 'ORGANIZADOR']),
+  roleMiddleware(['VALIDATOR', 'ORGANIZER']),
   (req, res) => gateController.validate(req, res)
 )
 

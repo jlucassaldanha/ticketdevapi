@@ -1,25 +1,27 @@
 export const swaggerDocument = {
   openapi: '3.0.0',
   info: {
-    title: 'TicketDev API 🎫',
+    title: 'TicketDev API',
     version: '1.0.0',
     description: `
-      Esta é a documentação interativa da **TicketDev API**, desenvolvida para o **Desafio Elite Dev 2026**.
+    -  
+      Esta é a documentação interativa da TicketDev API, desenvolvida para o Desafio Elite Dev 2026.
       
       Aqui você pode testar em tempo real todos os fluxos de integração com o catálogo do TMDb, 
       gerenciamento de eventos, simulação de pagamentos, reserva concorrente de assentos e validação de ingressos na portaria.
       
-      ### 🔑 Como testar rotas protegidas:
-      1. Use o endpoint \`POST /api/auth/register\` para criar um usuário ou use as contas pré-semeadas (seed).
-      2. Faça o login em \`POST /api/auth/login\` para obter seu token JWT.
-      3. Clique no botão azul **"Authorize"** no topo direito desta página.
-      4. Cole o token no formato: \`Bearer seu_token_jwt_aqui\` e confirme.
+      Como testar rotas protegidas:
+        1. Use o endpoint 'POST /api/auth/register' para criar um usuário ou use as contas pré-semeadas (seed).
+        2. Faça o login em 'POST /api/auth/login' para obter seu token JWT.
+        3. Clique no botão azul "Authorize" no topo direito desta página.
+        4. Cole o token e confirme.
+    -
     `,
   },
   servers: [
     {
       url: '/',
-      description: 'Servidor Atual (Herdado automaticamente da URL de acesso)',
+      description: 'Servidor Atual',
     },
   ],
   components: {
@@ -37,7 +39,7 @@ export const swaggerDocument = {
           id: { type: 'string', format: 'uuid' },
           name: { type: 'string' },
           email: { type: 'string', format: 'email' },
-          role: { type: 'string', enum: ['ORGANIZADOR', 'CLIENTE', 'PORTARIA'] },
+          role: { type: 'string', enum: ['ORGANIZER', 'CONSUMER', 'VALIDATOR'] },
           createdAt: { type: 'string', format: 'date-time' },
         },
       },
@@ -65,7 +67,7 @@ export const swaggerDocument = {
           eventId: { type: 'string' },
           clientId: { type: 'string' },
           seatNumber: { type: 'string', nullable: true },
-          status: { type: 'string', enum: ['ATIVO', 'UTILIZADO'] },
+          status: { type: 'string', enum: ['ACTIVE', 'USED'] },
           secureHash: { type: 'string' },
           createdAt: { type: 'string', format: 'date-time' },
           updatedAt: { type: 'string', format: 'date-time' },
@@ -74,7 +76,6 @@ export const swaggerDocument = {
     },
   },
   paths: {
-    // === AUTENTICAÇÃO ===
     '/api/auth/register': {
       post: {
         summary: 'Criar um novo usuário',
@@ -87,10 +88,10 @@ export const swaggerDocument = {
                 type: 'object',
                 required: ['name', 'email', 'password', 'role'],
                 properties: {
-                  name: { type: 'string', example: 'Ana Silva' },
+                  name: { type: 'string', example: 'Client Um' },
                   email: { type: 'string', example: 'cliente1@ticketdev.com' },
                   password: { type: 'string', example: 'SenhaTeste123' },
-                  role: { type: 'string', enum: ['ORGANIZADOR', 'CLIENTE', 'PORTARIA'], example: 'CLIENTE' },
+                  role: { type: 'string', enum: ['ORGANIZER', 'CONSUMER', 'VALIDATOR'], example: 'CONSUMER' },
                 },
               },
             },
@@ -99,6 +100,7 @@ export const swaggerDocument = {
         responses: {
           201: { description: 'Usuário cadastrado com sucesso.' },
           400: { description: 'E-mail já cadastrado ou dados inválidos.' },
+          500: { description: 'Erro interno do servidor. Não foi possível registrar.' }
         },
       },
     },
@@ -137,17 +139,19 @@ export const swaggerDocument = {
             },
           },
           401: { description: 'Credenciais inválidas.' },
+          404: { description: 'Usuário não encontrado.' },
+          500: { description: 'Erro interno no servidor. Não foi possível realizar o login.' }
         },
       },
     },
 
-    // === CATÁLOGO TMDb ===
     '/api/catalog/popular': {
       get: {
         summary: 'Listar filmes populares (Catálogo Externo)',
         tags: ['Catálogo (TMDb)'],
         responses: {
           200: { description: 'Lista de filmes populares retornada com sucesso.' },
+          500: { description: 'Erro interno no servidor. Falha ao conectar com o catálogo de filmes.' }
         },
       },
     },
@@ -168,11 +172,11 @@ export const swaggerDocument = {
         responses: {
           200: { description: 'Resultado da busca retornado com sucesso.' },
           400: { description: 'Parâmetro query ausente.' },
+          500: { description: 'Erro interno no servidor. Falha ao pesquisar no catálogo de filmes.' }
         },
       },
     },
 
-    // === EVENTOS ===
     '/api/events': {
       get: {
         summary: 'Listar todos os eventos publicados',
@@ -189,6 +193,7 @@ export const swaggerDocument = {
               },
             },
           },
+          500: { description: 'Erro interno no servidor. Não foi possível listar os eventos' }
         },
       },
       post: {
@@ -207,7 +212,7 @@ export const swaggerDocument = {
                   date: { type: 'string', format: 'date-time', example: '2026-10-15T20:00:00.000Z' },
                   location: { type: 'string', example: 'Allianz Parque - São Paulo, SP' },
                   capacity: { type: 'integer', example: 100 },
-                  price: { type: 'number', example: 150.0 },
+                  price: { type: 'number', example: 20.0 },
                 },
               },
             },
@@ -217,11 +222,74 @@ export const swaggerDocument = {
           201: { description: 'Evento criado e publicado com sucesso.' },
           401: { description: 'Não autorizado.' },
           403: { description: 'Acesso negado (Apenas organizadores).' },
+          500: { description: 'Erro interno no servidor. Não foi possível publicar o evento.' }
+        },
+      },
+    },
+    '/api/events/{id}': {
+      put: {
+        summary: 'Editar dados de um evento (Apenas Organizadores)',
+        tags: ['Eventos'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'ID do evento a ser editado',
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', example: 'Matrix: Resurrections (Sessão Especial)' },
+                  description: { type: 'string' },
+                  date: { type: 'string', format: 'date-time' },
+                  location: { type: 'string' },
+                  capacity: { type: 'integer' },
+                  price: { type: 'number' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: { description: 'Evento atualizado com sucesso.' },
+          401: { description: 'Não autorizado.' },
+          403: { description: 'Acesso negado.' },
+          404: { description: 'Evento não localizado para atualização.' },
+          500: { description: 'Erro interno do servidor. Falha ao atualizar o evento.' }
+        },
+      },
+      delete: {
+        summary: 'Excluir um evento (Apenas Organizadores)',
+        tags: ['Eventos'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'ID do evento a ser excluído',
+          },
+        ],
+        responses: {
+          200: { description: 'Evento excluído com sucesso!' },
+          400: { description: 'Não é possível excluir um evento que já possui ingressos vendidos.' },
+          401: { description: 'Não autorizado.' },
+          403: { description: 'Acesso negado.' },
+          404: { description: 'Evento não localizado.' },
+          500: { description: 'Erro internodo servidor. Falha ao excluir o evento.' }
         },
       },
     },
 
-    // === INGRESSOS (TICKETS) ===
     '/api/tickets/reserve': {
       post: {
         summary: 'Reservar assento e simular pagamento (Apenas Clientes)',
@@ -237,8 +305,8 @@ export const swaggerDocument = {
                 properties: {
                   eventId: { type: 'string', example: 'id-do-evento-aqui' },
                   seatNumber: { type: 'string', example: 'A12', description: 'Opcional (se omitido, será Pista)' },
-                  paymentMethod: { type: 'string', enum: ['CREDIT_CARD', 'PIX'], example: 'CREDIT_CARD' },
-                  paymentSimulateStatus: { type: 'string', enum: ['APROVADO', 'RECUSADO'], example: 'APROVADO' },
+                  paymentMethod: { type: 'string', enum: ['CREDIT_CARD', 'DEBIT_CARD', 'PIX'], example: 'CREDIT_CARD' },
+                  paymentSimulateStatus: { type: 'string', enum: ['APPROVED', 'REFUSED'], example: 'APPROVED' },
                 },
               },
             },
@@ -249,6 +317,7 @@ export const swaggerDocument = {
           400: { description: 'Capacidade esgotada ou campos obrigatórios ausentes.' },
           402: { description: 'Simulação: Pagamento recusado pela operadora.' },
           409: { description: 'Este assento já está reservado por outro cliente.' },
+          500: { description: 'Erro interno no servidor. Falha ao processar a reserva.' }
         },
       },
     },
@@ -269,12 +338,13 @@ export const swaggerDocument = {
               },
             },
           },
+          500: { description: 'Erro interno no servidor. Falha ao buscar seus ingressos.' }
         },
       },
     },
     '/api/tickets/share/{secureHash}': {
       get: {
-        summary: 'Visualizar ingresso compartilhado (Público - Sem Login)',
+        summary: 'Visualizar ingresso compartilhado (Público)',
         tags: ['Ingressos'],
         parameters: [
           {
@@ -288,11 +358,35 @@ export const swaggerDocument = {
         responses: {
           200: { description: 'Detalhes do ingresso compartilhado localizados com sucesso.' },
           404: { description: 'Ingresso inválido ou não encontrado.' },
+          500: { description: 'Erro interno no servidor. Falha ao buscar o ingresso compartilhado.' }
+        },
+      },
+    },
+    '/api/tickets/{id}/cancel': {
+      post: {
+        summary: 'Cancelar ingresso e devolver a vaga ao estoque (Apenas Clientes)',
+        tags: ['Ingressos'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'ID do ingresso a ser cancelado',
+          },
+        ],
+        responses: {
+          200: { description: 'Ingresso cancelado com sucesso e vaga devolvida ao estoque!' },
+          400: { description: 'Ingresso já cancelado ou já utilizado.' },
+          401: { description: 'Não autorizado.' },
+          403: { description: 'Você não tem autorização para cancelar este ingresso.' },
+          404: { description: 'Ingresso não localizado.' },
+          500: { description: 'Erro interno do servidor. Falha ao realizar o cancelamento.' }
         },
       },
     },
 
-    // === PORTARIA ===
     '/api/gate/validate': {
       post: {
         summary: 'Validar QR Code/Ingresso na Portaria (Portaria/Organizador)',
@@ -314,10 +408,11 @@ export const swaggerDocument = {
           },
         },
         responses: {
-          200: { description: 'VALID: Entrada liberada!' },
-          400: { description: 'WRONG_EVENT: Ingresso pertence a outro evento.' },
-          404: { description: 'INVALID: Ingresso ou assinatura falsificada/inexistente.' },
-          409: { description: 'ALREADY_USED: Ingresso já foi utilizado para entrar.' },
+          200: { description: 'Entrada liberada!' },
+          400: { description: 'Ingresso pertence a outro evento.' },
+          404: { description: 'Ingresso ou assinatura falsificada/inexistente.' },
+          409: { description: 'Ingresso já foi utilizado para entrar.' },
+          500: { description: 'Erro interno no servidor. Falha ao validar o ingresso.' }
         },
       },
     },

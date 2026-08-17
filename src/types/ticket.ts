@@ -11,10 +11,14 @@ export interface CreateTicketData {
 export interface ReserveTicketInput {
   eventId: string
   seatNumber?: string
-  paymentMethod: 'CREDIT_CARD' | 'PIX'
-  paymentSimulateStatus?: 'APROVADO' | 'RECUSADO'
+  paymentMethod: 'CREDIT_CARD' | 'DEBIT_CARD' | 'PIX'
+  paymentSimulateStatus?: 'APPROVED' | 'REFUSED'
 }
 
 export interface TicketWithEvent extends Ticket {
-  event: Event;
+  event:  {
+    title: string,
+    date: Date,
+    location: string
+  }
 }

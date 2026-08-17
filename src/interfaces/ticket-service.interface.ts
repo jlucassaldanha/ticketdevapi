@@ -4,5 +4,6 @@ import { ReserveTicketInput } from "../types/ticket";
 export interface ITicketService {
   reserveTicket(clientId: string, input: ReserveTicketInput): Promise<Ticket>
   getClientTickets(clientId: string): Promise<Ticket[]>
-  getTicketByHash(secureHash: string): Promise<Ticket | null>                                             
+  getTicketByHash(secureHash: string): Promise<Ticket | null>  
+  cancelTicket(ticketId: string, clientId: string): Promise<Ticket>                                           
 }

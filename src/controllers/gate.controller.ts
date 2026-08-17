@@ -31,7 +31,8 @@ export class GateController {
 				return res.status(409).json(result)
 			}
 		} catch (error: any) {
-			return res.status(500).json({ error: 'Erro interno ao validar o ingresso.' })
+			console.error('Falha ao validar o ingresso:', error)
+			return res.status(500).json({ error: 'Erro interno no servidor. Falha ao validar o ingresso.' })
 		}
 	}
 }

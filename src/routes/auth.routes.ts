@@ -17,7 +17,7 @@ authRouter.post('/login', (req, res) => authController.login(req, res))
 authRouter.get(
   '/profile/organizer', 
   authMiddleware, 
-  roleMiddleware(['ORGANIZADOR']), 
+  roleMiddleware(['ORGANIZER']), 
   (req: AuthenticatedRequest, res) => {
     return res.status(200).json({
       message: 'Seja bem-vindo à área do Organizador!',
@@ -29,7 +29,7 @@ authRouter.get(
 authRouter.get(
   '/profile/client', 
   authMiddleware, 
-  roleMiddleware(['CLIENTE']), 
+  roleMiddleware(['CONSUMER']), 
   (req: AuthenticatedRequest, res) => {
     return res.status(200).json({
       message: 'Seja bem-vindo à área do Cliente!',
