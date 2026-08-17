@@ -17,7 +17,8 @@ export class EventRepository implements IEventRepository {
             name: true,
             email: true,
           }
-        }
+        },
+        tickets: true
       }
     })
   }
