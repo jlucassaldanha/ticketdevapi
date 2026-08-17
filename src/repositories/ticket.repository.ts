@@ -92,4 +92,47 @@ export class TicketRepository implements ITicketRepository {
       data: { status }
     })
   }
+
+  async cancelTicketWithTransaction(ticketId: string, clientId: string): Promise<Ticket> {
+    return prisma.$transaction(async (tx) => {
+      const ticket = await tx.ticket.findUnique({
+        where: { id: ticketId },
+      });
+
+      if (!ticket) {
+        throw new Error('TICKET_NOT_FOUND')
+      }
+
+      if (ticket.clientId !== clientId) {
+        throw new Error('UNAUTHORIZED')
+      }
+
+      if (ticket.status === 'CANCELLED') {
+        throw new Error('TICKET_ALREADY_CANCELLED')
+      }
+
+      if (ticket.status === 'USED') {
+        throw new Error('TICKET_ALREADY_USED')
+      }
+
+      const updatedTicket = await tx.ticket.update({
+        where: { id: ticketId },
+        data: {
+          status: 'CANCELLED',
+          seatNumber: null,
+        },
+      })
+
+      await tx.event.update({
+        where: { id: ticket.eventId },
+        data: {
+          ticketsSold: {
+            decrement: 1,
+          },
+        },
+      })
+
+      return updatedTicket
+    })
+  }
 }

@@ -54,4 +54,8 @@ export class TicketService implements ITicketService {
     }
     return ticket
   }
+
+  async cancelTicket(ticketId: string, clientId: string): Promise<Ticket> {
+    return this.ticketRepository.cancelTicketWithTransaction(ticketId, clientId)
+  }
 }

@@ -9,4 +9,5 @@ export interface ITicketRepository {
   findById(id: string): Promise<Ticket | null>
   findBySecureHash(secureHash: string): Promise<TicketWithEvent | null>
   updateStatus(id: string, status: string): Promise<Ticket>
+  cancelTicketWithTransaction(ticketId: string, clientId: string): Promise<Ticket>
 }

@@ -362,6 +362,30 @@ export const swaggerDocument = {
         },
       },
     },
+    '/api/tickets/{id}/cancel': {
+      post: {
+        summary: 'Cancelar ingresso e devolver a vaga ao estoque (Apenas Clientes)',
+        tags: ['Ingressos'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'ID do ingresso a ser cancelado',
+          },
+        ],
+        responses: {
+          200: { description: 'Ingresso cancelado com sucesso e vaga devolvida ao estoque!' },
+          400: { description: 'Ingresso já cancelado ou já utilizado.' },
+          401: { description: 'Não autorizado.' },
+          403: { description: 'Você não tem autorização para cancelar este ingresso.' },
+          404: { description: 'Ingresso não localizado.' },
+          500: { description: 'Erro interno do servidor. Falha ao realizar o cancelamento.' }
+        },
+      },
+    },
 
     '/api/gate/validate': {
       post: {

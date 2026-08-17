@@ -24,4 +24,11 @@ ticketRouter.get(
   (req, res) => ticketController.myTickets(req, res)
 )
 
+ticketRouter.post(
+  '/:id/cancel',
+  authMiddleware,
+  roleMiddleware(['CONSUMER']),
+  (req, res) => ticketController.cancel(req, res)
+)
+
 export default ticketRouter
