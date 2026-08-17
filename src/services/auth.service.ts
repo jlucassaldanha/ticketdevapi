@@ -31,7 +31,7 @@ export class AuthService implements IAuthService {
     const user = await this.userRepository.findByEmail(input.email)
 
     if (!user) {
-      throw new Error('INVALID_CREDENTIALS')
+      throw new Error('USER_NOT_FOUND')
     }
 
     const isPasswordValid = await bcrypt.compare(input.password, user.password)

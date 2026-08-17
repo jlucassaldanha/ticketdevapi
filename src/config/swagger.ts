@@ -1,25 +1,27 @@
 export const swaggerDocument = {
   openapi: '3.0.0',
   info: {
-    title: 'TicketDev API 🎫',
+    title: 'TicketDev API',
     version: '1.0.0',
     description: `
-      Esta é a documentação interativa da **TicketDev API**, desenvolvida para o **Desafio Elite Dev 2026**.
+    -  
+      Esta é a documentação interativa da TicketDev API, desenvolvida para o Desafio Elite Dev 2026.
       
       Aqui você pode testar em tempo real todos os fluxos de integração com o catálogo do TMDb, 
       gerenciamento de eventos, simulação de pagamentos, reserva concorrente de assentos e validação de ingressos na portaria.
       
-      ### 🔑 Como testar rotas protegidas:
-      1. Use o endpoint \`POST /api/auth/register\` para criar um usuário ou use as contas pré-semeadas (seed).
-      2. Faça o login em \`POST /api/auth/login\` para obter seu token JWT.
-      3. Clique no botão azul **"Authorize"** no topo direito desta página.
-      4. Cole o token no formato: \`Bearer seu_token_jwt_aqui\` e confirme.
+      Como testar rotas protegidas:
+        1. Use o endpoint 'POST /api/auth/register' para criar um usuário ou use as contas pré-semeadas (seed).
+        2. Faça o login em 'POST /api/auth/login' para obter seu token JWT.
+        3. Clique no botão azul "Authorize" no topo direito desta página.
+        4. Cole o token e confirme.
+    -
     `,
   },
   servers: [
     {
       url: '/',
-      description: 'Servidor Atual (Herdado automaticamente da URL de acesso)',
+      description: 'Servidor Atual',
     },
   ],
   components: {
@@ -37,7 +39,7 @@ export const swaggerDocument = {
           id: { type: 'string', format: 'uuid' },
           name: { type: 'string' },
           email: { type: 'string', format: 'email' },
-          role: { type: 'string', enum: ['ORGANIZADOR', 'CLIENTE', 'PORTARIA'] },
+          role: { type: 'string', enum: ['ORGANIZER', 'CONSUMER', 'VALIDATOR'] },
           createdAt: { type: 'string', format: 'date-time' },
         },
       },
@@ -65,7 +67,7 @@ export const swaggerDocument = {
           eventId: { type: 'string' },
           clientId: { type: 'string' },
           seatNumber: { type: 'string', nullable: true },
-          status: { type: 'string', enum: ['ATIVO', 'UTILIZADO'] },
+          status: { type: 'string', enum: ['ACTIVE', 'USED'] },
           secureHash: { type: 'string' },
           createdAt: { type: 'string', format: 'date-time' },
           updatedAt: { type: 'string', format: 'date-time' },
@@ -74,7 +76,6 @@ export const swaggerDocument = {
     },
   },
   paths: {
-    // === AUTENTICAÇÃO ===
     '/api/auth/register': {
       post: {
         summary: 'Criar um novo usuário',
@@ -87,10 +88,10 @@ export const swaggerDocument = {
                 type: 'object',
                 required: ['name', 'email', 'password', 'role'],
                 properties: {
-                  name: { type: 'string', example: 'Ana Silva' },
+                  name: { type: 'string', example: 'Client Um' },
                   email: { type: 'string', example: 'cliente1@ticketdev.com' },
                   password: { type: 'string', example: 'SenhaTeste123' },
-                  role: { type: 'string', enum: ['ORGANIZADOR', 'CLIENTE', 'PORTARIA'], example: 'CLIENTE' },
+                  role: { type: 'string', enum: ['ORGANIZER', 'CONSUMER', 'VALIDATOR'], example: 'CONSUMER' },
                 },
               },
             },
@@ -137,11 +138,11 @@ export const swaggerDocument = {
             },
           },
           401: { description: 'Credenciais inválidas.' },
+          404: { description: 'Usuário não encontrado.' },
         },
       },
     },
 
-    // === CATÁLOGO TMDb ===
     '/api/catalog/popular': {
       get: {
         summary: 'Listar filmes populares (Catálogo Externo)',
@@ -172,7 +173,6 @@ export const swaggerDocument = {
       },
     },
 
-    // === EVENTOS ===
     '/api/events': {
       get: {
         summary: 'Listar todos os eventos publicados',
@@ -207,7 +207,7 @@ export const swaggerDocument = {
                   date: { type: 'string', format: 'date-time', example: '2026-10-15T20:00:00.000Z' },
                   location: { type: 'string', example: 'Allianz Parque - São Paulo, SP' },
                   capacity: { type: 'integer', example: 100 },
-                  price: { type: 'number', example: 150.0 },
+                  price: { type: 'number', example: 20.0 },
                 },
               },
             },
@@ -221,7 +221,6 @@ export const swaggerDocument = {
       },
     },
 
-    // === INGRESSOS (TICKETS) ===
     '/api/tickets/reserve': {
       post: {
         summary: 'Reservar assento e simular pagamento (Apenas Clientes)',
@@ -237,8 +236,8 @@ export const swaggerDocument = {
                 properties: {
                   eventId: { type: 'string', example: 'id-do-evento-aqui' },
                   seatNumber: { type: 'string', example: 'A12', description: 'Opcional (se omitido, será Pista)' },
-                  paymentMethod: { type: 'string', enum: ['CREDIT_CARD', 'PIX'], example: 'CREDIT_CARD' },
-                  paymentSimulateStatus: { type: 'string', enum: ['APROVADO', 'RECUSADO'], example: 'APROVADO' },
+                  paymentMethod: { type: 'string', enum: ['CREDIT_CARD', 'DEBIT_CARD', 'PIX'], example: 'CREDIT_CARD' },
+                  paymentSimulateStatus: { type: 'string', enum: ['APPROVED', 'REFUSED'], example: 'APPROVED' },
                 },
               },
             },
@@ -274,7 +273,7 @@ export const swaggerDocument = {
     },
     '/api/tickets/share/{secureHash}': {
       get: {
-        summary: 'Visualizar ingresso compartilhado (Público - Sem Login)',
+        summary: 'Visualizar ingresso compartilhado (Público)',
         tags: ['Ingressos'],
         parameters: [
           {
@@ -292,7 +291,6 @@ export const swaggerDocument = {
       },
     },
 
-    // === PORTARIA ===
     '/api/gate/validate': {
       post: {
         summary: 'Validar QR Code/Ingresso na Portaria (Portaria/Organizador)',

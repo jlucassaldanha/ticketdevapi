@@ -48,8 +48,11 @@ export class AuthController {
 
       return res.status(200).json(result)
     } catch (error: any) {
+      if (error.message === 'USER_NOT_FOUND') {
+        return res.status(404).json({ error: 'Usuário não encontrado.' })
+      }
       if (error.message === 'INVALID_CREDENTIALS') {
-        return res.status(401).json({ error: 'Erro interno do servidor.' })
+        return res.status(401).json({ error: 'Credenciais inválidas.' })
       }
     }
   }
