@@ -100,6 +100,7 @@ export const swaggerDocument = {
         responses: {
           201: { description: 'Usuário cadastrado com sucesso.' },
           400: { description: 'E-mail já cadastrado ou dados inválidos.' },
+          500: { description: 'Erro interno do servidor. Não foi possível registrar.' }
         },
       },
     },
@@ -139,6 +140,7 @@ export const swaggerDocument = {
           },
           401: { description: 'Credenciais inválidas.' },
           404: { description: 'Usuário não encontrado.' },
+          500: { description: 'Erro interno no servidor. Não foi possível realizar o login.' }
         },
       },
     },
@@ -149,6 +151,7 @@ export const swaggerDocument = {
         tags: ['Catálogo (TMDb)'],
         responses: {
           200: { description: 'Lista de filmes populares retornada com sucesso.' },
+          500: { description: 'Erro interno no servidor. Falha ao conectar com o catálogo de filmes.' }
         },
       },
     },
@@ -169,6 +172,7 @@ export const swaggerDocument = {
         responses: {
           200: { description: 'Resultado da busca retornado com sucesso.' },
           400: { description: 'Parâmetro query ausente.' },
+          500: { description: 'Erro interno no servidor. Falha ao pesquisar no catálogo de filmes.' }
         },
       },
     },
@@ -189,6 +193,7 @@ export const swaggerDocument = {
               },
             },
           },
+          500: { description: 'Erro interno no servidor. Não foi possível listar os eventos' }
         },
       },
       post: {
@@ -217,6 +222,7 @@ export const swaggerDocument = {
           201: { description: 'Evento criado e publicado com sucesso.' },
           401: { description: 'Não autorizado.' },
           403: { description: 'Acesso negado (Apenas organizadores).' },
+          500: { description: 'Erro interno no servidor. Não foi possível publicar o evento.' }
         },
       },
     },
@@ -248,6 +254,7 @@ export const swaggerDocument = {
           400: { description: 'Capacidade esgotada ou campos obrigatórios ausentes.' },
           402: { description: 'Simulação: Pagamento recusado pela operadora.' },
           409: { description: 'Este assento já está reservado por outro cliente.' },
+          500: { description: 'Erro interno no servidor. Falha ao processar a reserva.' }
         },
       },
     },
@@ -268,6 +275,7 @@ export const swaggerDocument = {
               },
             },
           },
+          500: { description: 'Erro interno no servidor. Falha ao buscar seus ingressos.' }
         },
       },
     },
@@ -287,6 +295,7 @@ export const swaggerDocument = {
         responses: {
           200: { description: 'Detalhes do ingresso compartilhado localizados com sucesso.' },
           404: { description: 'Ingresso inválido ou não encontrado.' },
+          500: { description: 'Erro interno no servidor. Falha ao buscar o ingresso compartilhado.' }
         },
       },
     },
@@ -312,10 +321,11 @@ export const swaggerDocument = {
           },
         },
         responses: {
-          200: { description: 'VALID: Entrada liberada!' },
-          400: { description: 'WRONG_EVENT: Ingresso pertence a outro evento.' },
-          404: { description: 'INVALID: Ingresso ou assinatura falsificada/inexistente.' },
-          409: { description: 'ALREADY_USED: Ingresso já foi utilizado para entrar.' },
+          200: { description: 'Entrada liberada!' },
+          400: { description: 'Ingresso pertence a outro evento.' },
+          404: { description: 'Ingresso ou assinatura falsificada/inexistente.' },
+          409: { description: 'Ingresso já foi utilizado para entrar.' },
+          500: { description: 'Erro interno no servidor. Falha ao validar o ingresso.' }
         },
       },
     },

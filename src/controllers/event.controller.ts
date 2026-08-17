@@ -28,7 +28,8 @@ export class EventController {
 
       return res.status(201).json(event)
     } catch (error: any) {
-      return res.status(500).json({ error: 'Não foi possível publicar o evento.' })
+      console.error('Não foi possível publicar o evento:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Não foi possível publicar o evento.' })
     } 
   }
 
@@ -37,7 +38,8 @@ export class EventController {
       const events = await this.eventService.listEvents()
       return res.status(200).json(events)
     } catch (error: any) {
-      return res.status(500).json({ error: 'Não foi possível listar os eventos' })
+      console.error('Não foi possível listar os eventos', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Não foi possível listar os eventos.' })
     }
   }
 }

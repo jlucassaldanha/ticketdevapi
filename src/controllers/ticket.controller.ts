@@ -50,8 +50,8 @@ export class TicketController {
           message: 'A operadora financeira recusou a transação. Verifique os dados do cartão de crédito simulado.' 
         })
       }
-
-      return res.status(500).json({ error: 'Erro interno ao processar a reserva.' })
+      console.error('Falha ao processar a reserva:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Falha ao processar a reserva.' })
     }
   }
 
@@ -65,8 +65,8 @@ export class TicketController {
       const tickets = await this.ticketService.getClientTickets(clientId)
       return res.status(200).json(tickets)
     } catch (error: any) {
-      console.error('Erro ao buscar ingressos do cliente:', error)
-      return res.status(500).json({ error: 'Erro interno ao buscar seus ingressos.' })
+      console.error('Falha ao buscar seus ingressos:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Falha ao buscar seus ingressos.' })
     }
   }
 
@@ -88,7 +88,8 @@ export class TicketController {
       if (error.message === 'TICKET_NOT_FOUND') {
         return res.status(404).json({ error: 'Ingresso inválido ou inexistente.' })
       }
-      return res.status(500).json({ error: 'Erro interno ao buscar o ingresso compartilhado.' })
+      console.error('Falha ao buscar o ingresso compartilhado:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Falha ao buscar o ingresso compartilhado.' })
     }
   }
 }

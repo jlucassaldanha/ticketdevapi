@@ -31,8 +31,8 @@ export class AuthController {
       if (error.message === "EMAIL_ALREADY_EXISTS") {
         return res.status(400).json({ error: "Este e-mail já está em uso."})
       }
-
-      return res.status(500).json({ error: 'Erro interno do servidor.' })
+      console.error('Não foi possível registrar:', error)
+      return res.status(500).json({ error: 'Erro interno do servidor. Não foi possível registrar.' })
     }
   }
 
@@ -54,6 +54,9 @@ export class AuthController {
       if (error.message === 'INVALID_CREDENTIALS') {
         return res.status(401).json({ error: 'Credenciais inválidas.' })
       }
+
+      console.error('Não foi possível realizar o login:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Não foi possível realizar o login.' })
     }
   }
 }

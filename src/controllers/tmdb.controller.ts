@@ -9,7 +9,8 @@ export class TMDBController {
       const movies = await this.tmdbService.getPopularMovies()
       return res.status(200).json(movies)
     } catch (error: any) {
-      return res.status(500).json({ error: 'Falha ao conectar com o catálogo de filmes.' })
+      console.error('Falha ao conectar com o catálogo de filmes:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Falha ao conectar com o catálogo de filmes.' })
     }
 	}
 
@@ -24,7 +25,8 @@ export class TMDBController {
       const movies = await this.tmdbService.searchMovies(query)
       return res.status(200).json(movies)
     } catch (error: any) {
-      return res.status(500).json({ error: 'Falha ao pesquisar no catálogo de filmes.' })
+      console.error('Falha ao pesquisar no catálogo de filmes:', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Falha ao pesquisar no catálogo de filmes.' })
     }
   }
 }
