@@ -17,7 +17,7 @@ eventRouter.get('/', (req, res) => eventController.list(req, res))
 eventRouter.post(
   '/',
   authMiddleware,
-  roleMiddleware(['ORGANIZADOR']),
+  roleMiddleware(['ORGANIZER']),
   (req, res) => eventController.create(req, res)
 )
 

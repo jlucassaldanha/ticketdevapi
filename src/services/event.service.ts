@@ -19,7 +19,7 @@ export class EventService implements IEventService {
       description: movieDetails.overview,
       imageUrl: movieDetails.poster_path ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}` : null,
       externalId: input.externalId,
-      category: 'FILME',
+      category: 'MOVIE',
       date: new Date(input.date),
       location: input.location,
       capacity: input.capacity,

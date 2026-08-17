@@ -15,7 +15,7 @@ ticketRouter.use(authMiddleware)
 
 ticketRouter.post(
   '/reserve', 
-  roleMiddleware(['CLIENTE']), 
+  roleMiddleware(['CONSUMER']), 
   (req, res) => ticketController.reserve(req, res)
 )
 

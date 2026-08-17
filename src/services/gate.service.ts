@@ -23,7 +23,7 @@ export class GateService implements IGateService {
 			}
 		}
 
-		if (ticket.status === 'UTILIZADO') {
+		if (ticket.status === 'USED') {
 			return {
 				status: 'ALREADY_USED',
 				message: 'Atenção! Este ingresso já foi validado e utilizado para entrada na portaria anteriormente.',
@@ -31,7 +31,7 @@ export class GateService implements IGateService {
 			}
 		}
 
-		const updatedTicket = await this.ticketRepository.updateStatus(ticket.id, 'UTILIZADO')
+		const updatedTicket = await this.ticketRepository.updateStatus(ticket.id, 'USED')
 
 		return {
 			status: 'VALID',

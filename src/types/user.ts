@@ -1,6 +1,6 @@
 import { Request } from "express"
 
-export type UserRole = 'ORGANIZADOR' | 'CLIENTE' | 'PORTARIA'
+export type UserRole = 'ORGANIZER' | 'CONSUMER' | 'VALIDATOR'
 
 export interface RegisterInput {
   name: string

@@ -68,7 +68,13 @@ export class TicketRepository implements ITicketRepository {
     return prisma.ticket.findUnique({
       where: { secureHash },
       include: {
-        event: true,
+        event: {
+          select: {
+            title: true,
+            date: true,
+            location: true
+          }
+        },
         client: {
           select: {
             id: true,

@@ -14,7 +14,7 @@ export class AuthController {
         return res.status(400).json({ error: "Todos os campos são obrigatórios"})
       }
 
-      const validRoles: UserRole[] = ["ORGANIZADOR", "CLIENTE", "PORTARIA"];
+      const validRoles: UserRole[] = ["ORGANIZER", "CONSUMER", "VALIDATOR"];
       if (!validRoles.includes(role.toUpperCase() as UserRole)) {
         return res.status(400).json({ error: "Cargo inválido." })
       }

@@ -10,7 +10,7 @@ export class TicketService implements ITicketService {
   async reserveTicket(clientId: string, input: ReserveTicketInput): Promise<Ticket> {
     const seat = input.seatNumber ? input.seatNumber.trim().toUpperCase() : null
 
-    if (input.paymentSimulateStatus === 'RECUSADO') {
+    if (input.paymentSimulateStatus === 'REFUSED') {
       throw new Error('PAYMENT_REFUSED');
     }
 
@@ -26,7 +26,7 @@ export class TicketService implements ITicketService {
         eventId: input.eventId,
         clientId,
         seatNumber: seat,
-        status: 'ATIVO',
+        status: 'ACTIVE',
         secureHash
       })
     } catch (error: any) {
