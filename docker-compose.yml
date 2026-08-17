@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: ticketdev-api
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=file:./prisma/dev.db
+      - JWT_SECRET=chave_secreta_homologacao_docker_2026
+      - TMDB_API_KEY=api_key_do_tmdb
+    volumes:
+      - .:/app
+      - /app/node_modules

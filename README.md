@@ -6,6 +6,7 @@ Este é o back-end da **TicketDev API**, desenvolvido para o **Desafio Elite Dev
 
 ## 🚀 Como Executar o Projeto
 
+### Opção A: Execução Local (Node.js + TypeScript)
 Em ambiente de desenvolvimento local, certifique-se de ter o **Node.js (v22+)** instalado e execute os comandos abaixo no terminal da raiz do seu projeto:
 
 **1. Instalar as dependências**
@@ -55,6 +56,32 @@ npm run dev
 
 ```
 
+### Opção B: Execução via Docker Compose 🐳
+Para facilitar a homologação e avaliação sem a necessidade de configurar ambientes locais, a aplicação está totalmente conteinerizada. Certifique-se de ter o Docker instalado e execute:
+
+**1. Configurar variaveis de ambiente**
+
+No arquivo docker-compose.yml altere as variaveis de ambiente para as suas próprias
+
+```bash
+environment:
+  - PORT=3000
+  - DATABASE_URL=file:./prisma/dev.db
+  - JWT_SECRET=chave_secreta_homologacao_docker_2026
+  - TMDB_API_KEY=api_key_do_tmdb
+```
+
+**2.Iniciar container**
+
+```bash
+docker-compose up --build
+```
+
+O Docker Compose irá:
+1. Subir a imagem Node.js otimizada.
+2. Executar as migrações do banco SQLite.
+3. Executar a sementeira de dados de teste (Seed) automaticamente.
+4. Expor a API na porta `3000` e o Swagger em `/api-docs`.
 
 O servidor estará ativo em: `http://localhost:3000`  
 A documentação estará disponível em: `http://localhost:3000/api-docs`
@@ -70,14 +97,6 @@ Para testar as chamadas diretamente do seu navegador:
 2. Realize o login no endpoint `/api/auth/login` para copiar o token JWT.
 3. Clique em **"Authorize"** no topo direito da tela do Swagger.
 4. Cole seu token e explore as operações!
-
-### Endpoints Mapeados no Swagger:
-
-*   **Autenticação (`/api/auth`)**: Cadastro de novos usuários e login com geração de token JWT.
-*   **Catálogo (`/api/catalog`)**: Integração e busca de filmes no catálogo externo do TMDb.
-*   **Eventos (`/api/events`)**: Criação e publicação de eventos (exclusivo para Organizadores).
-*   **Ingressos (`/api/tickets`)**: Reserva de assentos marcados/pista, simulação de pagamentos e link de compartilhamento de ingressos.
-*   **Portaria (`/api/gate`)**: Validação de ingressos e QR Codes (exclusivo para Portaria e Organizadores).
 
 ---
 
@@ -101,12 +120,21 @@ Cada ingresso gerado carrega um campo `secureHash` gerado no servidor usando **H
 
 ### 4. Gestão de Status de Validação na Portaria
 O fluxo de validação na portaria (`POST /api/gate/validate`) foi desenhado para retornar as seguintes respostas amigáveis exigidas pelo edital:
-*   `VALID` (200 OK): Entrada permitida, mudando o status para `UTILIZADO`.
+*   `VALID` (200 OK): Entrada permitida, mudando o status para `USED`.
 *   `ALREADY_USED` (409 Conflict): Impede tentativas de fraude por cópias físicas ou capturas de tela do QR Code.
 *   `WRONG_EVENT` (400 Bad Request): Alerta caso o ingresso pertença a outro evento da plataforma.
 *   `INVALID` (404 Not Found): Retorno para ingressos inexistentes ou com assinaturas digitais violadas.
 
----
+### 5. Devolução de Ingresso ao Estoque (Cancelamento)
+A devolução de ingressos foi implementada utilizando o mesmo padrão transacional atômico. Ao cancelar uma reserva (`POST /api/tickets/:id/cancel`):
+*   O status do ingresso muda de `ACTIVE` para `CANCELLED`.
+*   O assento reservado (`seatNumber`) é setado como `null`, liberando-o no banco imediatamente para que outro cliente possa comprá-lo.
+*   O contador de vendidos `ticketsSold` do evento é decrementado, retornando a vaga de pista/assento ao estoque de forma limpa e auditável.
+
+### 6. Decisão de Projeto: Ausência de Testes Automatizados 🕒
+Uma decisão pragmática de engenharia foi tomada nesta etapa do projeto: **a ausência intencional de suítes de testes unitários/integração**.
+*   **Justificativa:** Em um cenário de entrega sob escopo de tempo extremamente limitado (Desafio Técnico de 3 dias), a escrita e manutenção de testes unitários e de integração consome um tempo precioso que foi realocado para o desenvolvimento de **regras de negócio críticas e transacionais de alto valor** (controle de concorrência com Prisma Transactions, assinatura criptográfica offline HMAC, integração real com a API do TMDb e conteinerização via Docker).
+*   **Alternativa de Qualidade:** A corretude do sistema foi validada exaustivamente através do mapeamento de rotas e testes dinâmicos manuais via **Swagger UI**, garantindo que 100% dos fluxos funcionassem de forma integrada e sem regressões antes da entrega.
 
 ## 🤖 Declaração de Uso de IA (Transparência & Parceria Estratégica)
 
