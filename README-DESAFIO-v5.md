@@ -8,25 +8,45 @@ Este é o back-end da **TicketDev API**, desenvolvido para o **Desafio Elite Dev
 
 Em ambiente de desenvolvimento local, certifique-se de ter o **Node.js (v22+)** instalado e execute os comandos abaixo no terminal da raiz do seu projeto:
 
-#### 1. Instalar as dependências do projeto
-`npm install`
+**1. Instalar as dependências**
 
-#### 2. Gerar o Prisma Client com as tipagens estritas
-`npx prisma generate`
-
-#### 3. Executar as migrações e popular o banco SQLite (Seed automático)
-`npx prisma migrate dev --name init`
-
-#### 4. Criar .env local
 ```bash
-DATABASE_URL="URL_DO_BANCO"
-PORT=3000
-JWT_SECRET='TOKEN_SUPER_SECRETO'
-TMDB_API_KEY="api_key_do_tmdb"
+npm install
+
 ```
 
-#### 5. Iniciar o servidor em modo de desenvolvimento (hot-reload)
-`npm run dev`
+**2. Criar e configurar o .env local**
+Crie o arquivo na raiz do projeto. É obrigatório que isso seja feito antes de interagir com o banco de dados.
+
+```env
+DATABASE_URL="file:./dev.db"
+PORT=3000
+JWT_SECRET="TOKEN_SUPER_SECRETO"
+TMDB_API_KEY="api_key_do_tmdb"
+
+```
+
+**3. Gerar as tipagens do Prisma Client**
+
+```bash
+npx prisma generate
+
+```
+
+**4. Aplicar as migrações existentes e popular o banco (Seed)**
+Execute o comando de desenvolvimento **sem** passar nomes. O Prisma vai detectar que o banco SQLite ainda não existe, criará o arquivo `dev.db` e executará todas as pastas de migração da imagem em ordem cronológica. Se o projeto tiver um script de *seed* configurado no `package.json`, ele será disparado automaticamente no final.
+
+```bash
+npx prisma migrate dev
+
+```
+
+**5. Iniciar o servidor em modo de desenvolvimento**
+
+```bash
+npm run dev
+
+```
 
 
 O servidor estará ativo em: `http://localhost:3000`  
