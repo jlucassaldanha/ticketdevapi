@@ -8,22 +8,29 @@ Este é o back-end da **TicketDev API**, desenvolvido para o **Desafio Elite Dev
 
 Em ambiente de desenvolvimento local, certifique-se de ter o **Node.js (v22+)** instalado e execute os comandos abaixo no terminal da raiz do seu projeto:
 
+#### 1. Instalar as dependências do projeto
+`npm install`
+
+#### 2. Gerar o Prisma Client com as tipagens estritas
+`npx prisma generate`
+
+#### 3. Executar as migrações e popular o banco SQLite (Seed automático)
+`npx prisma migrate dev --name init`
+
+#### 4. Criar .env local
 ```bash
-# 1. Instalar as dependências do projeto
-npm install
-
-# 2. Gerar o Prisma Client com as tipagens estritas
-npx prisma generate
-
-# 3. Executar as migrações e popular o banco SQLite (Seed automático)
-npx prisma migrate dev --name init
-
-# 4. Iniciar o servidor em modo de desenvolvimento (hot-reload)
-npm run dev
+DATABASE_URL="URL_DO_BANCO"
+PORT=3000
+JWT_SECRET='TOKEN_SUPER_SECRETO'
+TMDB_API_KEY="api_key_do_tmdb"
 ```
 
-O servidor estará ativo em: `http://localhost:3001`  
-A documentação viva estará disponível em: `http://localhost:3001/api-docs`
+#### 5. Iniciar o servidor em modo de desenvolvimento (hot-reload)
+`npm run dev`
+
+
+O servidor estará ativo em: `http://localhost:3000`  
+A documentação viva estará disponível em: `http://localhost:3000/api-docs`
 
 ---
 
