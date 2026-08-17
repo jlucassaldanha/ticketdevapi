@@ -27,4 +27,17 @@ export class EventRepository implements IEventRepository {
       where: { id }
     })
   }
+
+  async update(id: string, data: Partial<Event>): Promise<Event> {
+    return prisma.event.update({
+      where: { id },
+      data
+    })
+  }
+
+  async delete(id: string): Promise<Event> {
+    return prisma.event.delete({
+      where: { id }
+    })
+  }
 }

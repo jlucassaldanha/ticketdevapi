@@ -226,6 +226,69 @@ export const swaggerDocument = {
         },
       },
     },
+    '/api/events/{id}': {
+      put: {
+        summary: 'Editar dados de um evento (Apenas Organizadores)',
+        tags: ['Eventos'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'ID do evento a ser editado',
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string', example: 'Matrix: Resurrections (Sessão Especial)' },
+                  description: { type: 'string' },
+                  date: { type: 'string', format: 'date-time' },
+                  location: { type: 'string' },
+                  capacity: { type: 'integer' },
+                  price: { type: 'number' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: { description: 'Evento atualizado com sucesso.' },
+          401: { description: 'Não autorizado.' },
+          403: { description: 'Acesso negado.' },
+          404: { description: 'Evento não localizado para atualização.' },
+          500: { description: 'Erro interno do servidor. Falha ao atualizar o evento.' }
+        },
+      },
+      delete: {
+        summary: 'Excluir um evento (Apenas Organizadores)',
+        tags: ['Eventos'],
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string', format: 'uuid' },
+            description: 'ID do evento a ser excluído',
+          },
+        ],
+        responses: {
+          200: { description: 'Evento excluído com sucesso!' },
+          400: { description: 'Não é possível excluir um evento que já possui ingressos vendidos.' },
+          401: { description: 'Não autorizado.' },
+          403: { description: 'Acesso negado.' },
+          404: { description: 'Evento não localizado.' },
+          500: { description: 'Erro internodo servidor. Falha ao excluir o evento.' }
+        },
+      },
+    },
 
     '/api/tickets/reserve': {
       post: {

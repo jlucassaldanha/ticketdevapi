@@ -31,4 +31,34 @@ export class EventService implements IEventService {
   async listEvents(): Promise<Event[]> {
     return this.eventRepository.findAll()
   }
+
+  async updateEvent(id: string, organizerId: string, data: Partial<Event>): Promise<Event> {
+    const event = await this.eventRepository.findById(id)
+    if (!event) {
+      throw new Error('EVENT_NOT_FOUND')
+    }
+
+    if (event.organizerId !== organizerId) {
+      throw new Error('UNAUTHORIZED_EVENT_ACCESS');
+    }
+
+    return this.eventRepository.update(id, data)
+  }
+
+  async deleteEvent(id: string, organizerId: string): Promise<Event> {
+    const event = await this.eventRepository.findById(id)
+    if (!event) {
+      throw new Error('EVENT_NOT_FOUND')
+    }
+
+    if (event.organizerId !== organizerId) {
+      throw new Error('UNAUTHORIZED_EVENT_ACCESS');
+    }
+
+    if (event.ticketsSold > 0) {
+      throw new Error('EVENT_HAS_SOLD_TICKETS')
+    }
+
+    return this.eventRepository.delete(id)
+  }
 }

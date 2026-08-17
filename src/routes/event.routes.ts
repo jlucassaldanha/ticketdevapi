@@ -21,4 +21,18 @@ eventRouter.post(
   (req, res) => eventController.create(req, res)
 )
 
+eventRouter.put(
+  '/:id',
+  authMiddleware,
+  roleMiddleware(['ORGANIZER']),
+  (req, res) => eventController.update(req, res)
+)
+
+eventRouter.delete(
+  '/:id',
+  authMiddleware,
+  roleMiddleware(['ORGANIZER']),
+  (req, res) => eventController.delete(req, res)
+)
+
 export default eventRouter
