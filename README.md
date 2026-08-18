@@ -21,35 +21,40 @@ npm install
 Crie o arquivo na raiz do projeto.
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://ticketuser:ticketpassword@localhost:5432/ticketdev_db?schema=public"
 PORT=3000
 JWT_SECRET="TOKEN_SUPER_SECRETO"
 TMDB_API_KEY="api_key_do_tmdb"
 
 ```
 
-**3. Gerar as tipagens do Prisma Client**
+**3. Subir banco de dados no Docker**
+```bash
+docker-compose up -d postgres-db
+```
+
+**4. Gerar as tipagens do Prisma Client**
 
 ```bash
 npx prisma generate
 
 ```
 
-**4. Aplicar as migrações existentes (Seed)**
+**5. Aplicar as migrações existentes (Seed)**
 
 ```bash
-npx prisma migrate dev
+npx prisma db push
 
 ```
 
-**5. Popular banco de dados (Seed)**
+**6. Popular banco de dados (Seed)**
 
 ```bash
 npx tsx prisma/seed.ts
 
 ```
 
-**6. Iniciar o servidor em modo de desenvolvimento**
+**7. Iniciar o servidor em modo de desenvolvimento**
 
 ```bash
 npm run dev
@@ -66,7 +71,7 @@ No arquivo docker-compose.yml altere as variaveis de ambiente para as suas próp
 ```bash
 environment:
   - PORT=3000
-  - DATABASE_URL=file:./prisma/dev.db
+  - DATABASE_URL=postgresql://ticketuser:ticketpassword@postgres-db:5432/ticketdev_db?schema=public
   - JWT_SECRET=chave_secreta_homologacao_docker_2026
   - TMDB_API_KEY=api_key_do_tmdb
 ```
