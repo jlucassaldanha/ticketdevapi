@@ -8,6 +8,17 @@ export class EventRepository implements IEventRepository {
     return prisma.event.create({ data })
   }
 
+  async findByOrganizerId(organizerId: string): Promise<Event[]> {
+    return prisma.event.findMany({
+      where: {
+        organizerId: organizerId,
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    })
+  }
+
   async findAll(): Promise<Event[]> {
     return prisma.event.findMany({
       include: {
@@ -17,7 +28,8 @@ export class EventRepository implements IEventRepository {
             name: true,
             email: true,
           }
-        }
+        },
+        tickets: true
       }
     })
   }

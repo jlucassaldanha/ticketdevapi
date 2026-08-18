@@ -50,7 +50,7 @@ async function main() {
       name: 'Valdir Portaria',
       email: 'portaria@ticketdev.com',
       password: hashedPassword,
-      role: 'CONSUMER',
+      role: 'VALIDATOR',
     },
   ]
 

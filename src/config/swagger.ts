@@ -290,6 +290,88 @@ export const swaggerDocument = {
       },
     },
 
+    '/api/events/my-events': {
+      get: {
+        summary: 'Lista os eventos do organizador autenticado',
+        description: 'Retorna estritamente as sessões de cinema criadas pelo organizador logado, garantindo o isolamento de dados no banco de dados SQLite.',
+        tags: ['Eventos'],
+        security: [
+          {
+            bearerAuth: [] // Indica que a rota exige o Token JWT enviado no Header
+          }
+        ],
+        responses: {
+          200: {
+            description: 'Lista de eventos retornada com sucesso.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: {
+                        type: 'string',
+                        format: 'uuid',
+                        example: 'd3b07384-d113-4956-a5cc-484d12410a58'
+                      },
+                      title: {
+                        type: 'string',
+                        example: 'Batman: O Cavaleiro das Trevas'
+                      },
+                      category: {
+                        type: 'string',
+                        example: 'Cinema'
+                      },
+                      date: {
+                        type: 'string',
+                        format: 'date-time',
+                        example: '2026-10-15T20:00:00.000Z'
+                      },
+                      location: {
+                        type: 'string',
+                        example: 'Sala IMAX - Shopping Center'
+                      },
+                      price: {
+                        type: 'number',
+                        format: 'float',
+                        example: 35.50
+                      },
+                      capacity: {
+                        type: 'integer',
+                        example: 100
+                      },
+                      ticketsSold: {
+                        type: 'integer',
+                        example: 12
+                      },
+                      bannerUrl: {
+                        type: 'string',
+                        example: 'https://image.tmdb.org/t/p/w500/qJ2tWGBUrU9m8v3511E4YmNfOtn.jpg'
+                      },
+                      synopsis: {
+                        type: 'string',
+                        example: 'O herói Batman enfrenta o terrível Coringa em Gotham.'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          401: {
+            description: 'Não autorizado. Token JWT ausente, expirado ou inválido.'
+          },
+          403: {
+            description: 'Proibido. O usuário autenticado não possui o papel de "ORGANIZADOR".'
+          },
+          500: {
+            description: 'Erro interno do servidor. Falha ao processar a consulta no banco SQLite.'
+          }
+        }
+      }
+    },
+
     '/api/tickets/reserve': {
       post: {
         summary: 'Reservar assento e simular pagamento (Apenas Clientes)',
