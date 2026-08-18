@@ -1,15 +1,13 @@
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import dotenv from 'dotenv';
+import pg from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-dotenv.config();
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
 
-const connectionString = process.env.DATABASE_URL || 'file:./prisma/dev.db';
-
-const adapter = new PrismaBetterSqlite3({ url: connectionString });
-
-export const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log("Iniciando sementeira do banco de dados.")
@@ -123,7 +121,7 @@ async function main() {
 main()
   .catch((e) => {
     console.error('Erro na sementeira:', e);
-    process.exit(1);
+    process.exit(0)
   })
   .finally(async () => {
     await prisma.$disconnect();

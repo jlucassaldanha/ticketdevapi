@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: ticketdev-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ticketuser
+      POSTGRES_PASSWORD: ticketpassword
+      POSTGRES_DB: ticketdev_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   api:
     build: .
     container_name: ticketdev-api
@@ -8,9 +21,14 @@ services:
       - "3000:3000"
     environment:
       - PORT=3000
-      - DATABASE_URL=file:./prisma/dev.db
+      - DATABASE_URL=postgresql://ticketuser:ticketpassword@postgres-db:5432/ticketdev_db?schema=public
       - JWT_SECRET=chave_secreta_homologacao_docker_2026
       - TMDB_API_KEY=api_key_do_tmdb
     volumes:
       - .:/app
       - /app/node_modules
+    depends_on:
+      - postgres-db 
+
+volumes:
+  postgres_data:
