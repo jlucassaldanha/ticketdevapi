@@ -28,6 +28,14 @@ export class EventService implements IEventService {
     })
   }
 
+  async getEventsByOrganizer(organizerId: string): Promise<Event[]> {
+    if (!organizerId) {
+      throw new Error('ORGANIZER_ID_REQUIRED')
+    }
+
+    return this.eventRepository.findByOrganizerId(organizerId)
+  }
+
   async listEvents(): Promise<Event[]> {
     return this.eventRepository.findAll()
   }

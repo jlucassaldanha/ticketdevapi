@@ -5,6 +5,27 @@ import { AuthenticatedRequest } from "../types/user";
 export class EventController {
   constructor(private eventService: IEventService) { }
 
+  async getMyEvents(req: AuthenticatedRequest, res: Response) {
+    try {
+      const organizerId = req.user?.id 
+
+      if (!organizerId) {
+        return res.status(401).json({ error: 'Operação não autorizada. Usuário não identificado.' })
+      }
+
+      const events = await this.eventService.getEventsByOrganizer(organizerId)
+      return res.status(200).json(events)
+
+    } catch (error: any) {
+      if (error.message === 'ORGANIZER_ID_REQUIRED') {
+        return res.status(400).json({ error: 'O ID do organizador é obrigatório.' })
+      }
+
+      console.error('Falha ao processar a requisição.', error)
+      return res.status(500).json({ error: 'Erro interno no servidor. Falha ao processar a requisição.' })
+    }
+  }
+
   async create(req: AuthenticatedRequest, res: Response) {
     try {
       const organizerId = req.user?.id

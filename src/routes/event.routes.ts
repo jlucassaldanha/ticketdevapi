@@ -14,6 +14,13 @@ const eventController = new EventController(eventService)
 
 eventRouter.get('/', (req, res) => eventController.list(req, res))
 
+eventRouter.get(
+  '/my-events', 
+  authMiddleware, 
+  roleMiddleware(['ORGANIZER']), 
+  (req, res) => eventController.getMyEvents(req, res)
+);
+
 eventRouter.post(
   '/',
   authMiddleware,
