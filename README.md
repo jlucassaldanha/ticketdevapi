@@ -40,7 +40,7 @@ npx prisma generate
 
 ```
 
-**5. Aplicar as migrações existentes (Seed)**
+**5. Aplicar as migrações existentes**
 
 ```bash
 npx prisma db push
