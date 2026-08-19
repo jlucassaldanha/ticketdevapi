@@ -2,7 +2,7 @@
 
 Este é o back-end da **TicketDev API**, desenvolvido para o **Desafio Elite Dev 2026**. Trata-se de uma solução estruturada sob os mais rigorosos padrões de arquitetura de software para gerenciar o ciclo completo de venda, validação de ingressos e publicação de eventos.
 
-A API em produção esta disponível em: [TicketDevApi](https://ticketdevapi.onrender.com)
+A API em produção esta disponível em [TicketDevApi](https://ticketdevapi.onrender.com/api-docs)
 O frontend que consome essa API esta disponível em [TicketDevWebApp](https://ticketdevwebapp.vercel.app/) e o repositório em [TicketDevWebAppRepo](https://github.com/jlucassaldanha/ticketdevwebapp)
 
 ## Aviso sobre lentidão
