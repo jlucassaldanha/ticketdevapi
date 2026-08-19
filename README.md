@@ -5,6 +5,10 @@ Este é o back-end da **TicketDev API**, desenvolvido para o **Desafio Elite Dev
 A API em produção esta disponível em: [TicketDevApi](https://ticketdevapi.onrender.com)
 O frontend que consome essa API esta disponível em [TicketDevWebApp](https://ticketdevwebapp.vercel.app/) e o repositório em [TicketDevWebAppRepo](https://github.com/jlucassaldanha/ticketdevwebapp)
 
+## Aviso sobre lentidão
+
+Devido a aplicação em produção estar publicada na plataforma Render utilizando o Free Tier, há certa lentidão no primeiro carregamento da API no primeiro acesso após um tempo de inatividade.
+
 ---
 
 ## 🚀 Como Executar o Projeto
@@ -108,7 +112,7 @@ Para testar as chamadas diretamente do seu navegador:
 
 ---
 
-## 🏗️ Decisões Arquiteturais (Sênior Craftsmanship)
+## 🏗️ Decisões Arquiteturais
 
 Fugindo de estruturas genéricas, este back-end foi arquitetado com foco em segurança, desacoplamento de código e alta manutenibilidade:
 
