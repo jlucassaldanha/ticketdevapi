@@ -319,6 +319,18 @@ export const swaggerDocument = {
                         type: 'string',
                         example: 'Batman: O Cavaleiro das Trevas'
                       },
+                      description: {
+                        type: 'string',
+                        example: 'O herói Batman enfrenta o terrível Coringa em Gotham.'
+                      },
+                      imageUrl: {
+                        type: 'string',
+                        example: 'https://image.tmdb.org/t/p/w500/qJ2tWGBUrU9m8v3511E4YmNfOtn.jpg'
+                      },
+                      externalId: {
+                        type: 'string',
+                        example: '123'
+                      },
                       category: {
                         type: 'string',
                         example: 'Cinema'
@@ -332,26 +344,26 @@ export const swaggerDocument = {
                         type: 'string',
                         example: 'Sala IMAX - Shopping Center'
                       },
+                      capacity: {
+                        type: 'integer',
+                        example: 100
+                      },
                       price: {
                         type: 'number',
                         format: 'float',
                         example: 35.50
                       },
-                      capacity: {
-                        type: 'integer',
-                        example: 100
-                      },
                       ticketsSold: {
                         type: 'integer',
                         example: 12
                       },
-                      bannerUrl: {
+                      organizerId: {
                         type: 'string',
-                        example: 'https://image.tmdb.org/t/p/w500/qJ2tWGBUrU9m8v3511E4YmNfOtn.jpg'
+                        example: '12bg3-hg327h-6321h'
                       },
-                      synopsis: {
+                      createdAt: {
                         type: 'string',
-                        example: 'O herói Batman enfrenta o terrível Coringa em Gotham.'
+                        example: "2026-08-18T16:25:17.249Z"
                       }
                     }
                   }
