@@ -73,7 +73,8 @@ export class TicketRepository implements ITicketRepository {
           select: {
             title: true,
             date: true,
-            location: true
+            location: true,
+            imageUrl: true
           }
         },
         client: {
