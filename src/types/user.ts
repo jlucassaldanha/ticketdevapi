@@ -17,7 +17,7 @@ export interface UserWithoutPassword {
   id: string
   name: string
   email: string
-  role: string
+  role: Role
   createdAt: Date
 }
 

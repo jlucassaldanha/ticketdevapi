@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { IAuthService } from '../interfaces/auth-service.interface';
 import { Role } from '@prisma/client';
+import { error } from 'console';
 
 
 export class AuthController {
@@ -14,16 +15,24 @@ export class AuthController {
         return res.status(400).json({ error: "Todos os campos são obrigatórios"})
       }
 
-      const validRoles: Role[] = ["ORGANIZER", "CONSUMER", "VALIDATOR"];
-      if (!validRoles.includes(role.toUpperCase() as Role)) {
-        return res.status(400).json({ error: "Cargo inválido." })
+      if (typeof role !== 'string') {
+        return res.status(400).json({ error: "Formato de cargo inválido." })
+      }
+      
+      const roleUpper = role.toUpperCase()
+
+      const validRoles = Object.values(Role)
+      if (!validRoles.includes(roleUpper as Role)) {
+        return res.status(400).json({
+          error: `Cargo inválido. Cargos permitidos: ${validRoles.join(', ')}`
+        })
       }
 
       const user = await this.authService.register({
         name, 
         email, 
         password, 
-        role: role.toUpperCase() as Role
+        role: roleUpper as Role
       })
 
       return res.status(201).json(user)
