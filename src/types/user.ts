@@ -1,12 +1,11 @@
+import { Role } from '@prisma/client'
 import { Request } from "express"
-
-export type UserRole = 'ORGANIZER' | 'CONSUMER' | 'VALIDATOR'
 
 export interface RegisterInput {
   name: string
   email: string
   password: string
-  role: UserRole
+  role: Role
 }
 
 export interface LoginInput {
@@ -30,6 +29,6 @@ export interface AuthResponse {
 export interface AuthenticatedRequest extends Request {
   user?: {
     id: string
-    role: UserRole
+    role: Role
   }
 }

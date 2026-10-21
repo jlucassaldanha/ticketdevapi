@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { UserRole } from '../types/user';
 import { IAuthService } from '../interfaces/auth-service.interface';
+import { Role } from '@prisma/client';
 
 
 export class AuthController {
@@ -14,8 +14,8 @@ export class AuthController {
         return res.status(400).json({ error: "Todos os campos são obrigatórios"})
       }
 
-      const validRoles: UserRole[] = ["ORGANIZER", "CONSUMER", "VALIDATOR"];
-      if (!validRoles.includes(role.toUpperCase() as UserRole)) {
+      const validRoles: Role[] = ["ORGANIZER", "CONSUMER", "VALIDATOR"];
+      if (!validRoles.includes(role.toUpperCase() as Role)) {
         return res.status(400).json({ error: "Cargo inválido." })
       }
 
@@ -23,7 +23,7 @@ export class AuthController {
         name, 
         email, 
         password, 
-        role: role.toUpperCase() as UserRole
+        role: role.toUpperCase() as Role
       })
 
       return res.status(201).json(user)

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import pg from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -21,7 +21,7 @@ async function main() {
       name: 'Julio Organiza',
       email: 'organizador1@ticketdev.com',
       password: hashedPassword,
-      role: 'ORGANIZER',
+      role: Role.ORGANIZER,
     },
   })
 
@@ -30,25 +30,25 @@ async function main() {
       name: 'Carlos Organiza',
       email: 'organizador2@ticketdev.com',
       password: hashedPassword,
-      role: 'ORGANIZER',
+      role: Role.ORGANIZER,
     },
     {
       name: 'Ana Silva',
       email: 'cliente1@ticketdev.com',
       password: hashedPassword,
-      role: 'CONSUMER',
+      role: Role.CONSUMER,
     },
     {
       name: 'Bruno Souza',
       email: 'cliente2@ticketdev.com',
       password: hashedPassword,
-      role: 'CONSUMER',
+      role: Role.CONSUMER,
     },
     {
       name: 'Valdir Portaria',
       email: 'portaria@ticketdev.com',
       password: hashedPassword,
-      role: 'VALIDATOR',
+      role: Role.VALIDATOR,
     },
   ]
 

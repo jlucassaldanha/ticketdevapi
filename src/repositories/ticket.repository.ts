@@ -1,4 +1,4 @@
-import { Prisma, Ticket } from "@prisma/client";
+import { Prisma, Ticket, TicketStatus } from "@prisma/client";
 import { ITicketRepository } from "../interfaces/ticket-repository.interface";
 import { CreateTicketData, TicketWithEvent } from "../types/ticket";
 import { prisma } from "../config/database";
@@ -88,7 +88,7 @@ export class TicketRepository implements ITicketRepository {
     }) as Promise<TicketWithEvent | null>
   }
 
-  async updateStatus(id: string, status: string): Promise<Ticket> {
+  async updateStatus(id: string, status: TicketStatus): Promise<Ticket> {
     return prisma.ticket.update({
       where: { id },
       data: { status }
@@ -109,18 +109,18 @@ export class TicketRepository implements ITicketRepository {
         throw new Error('UNAUTHORIZED')
       }
 
-      if (ticket.status === 'CANCELLED') {
+      if (ticket.status === TicketStatus.CANCELLED) {
         throw new Error('TICKET_ALREADY_CANCELLED')
       }
 
-      if (ticket.status === 'USED') {
+      if (ticket.status === TicketStatus.USED) {
         throw new Error('TICKET_ALREADY_USED')
       }
 
       const updatedTicket = await tx.ticket.update({
         where: { id: ticketId },
         data: {
-          status: 'CANCELLED',
+          status: TicketStatus.CANCELLED,
           seatNumber: null,
         },
       })
