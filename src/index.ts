@@ -22,6 +22,10 @@ app.use('/api/events', eventRouter)
 app.use('/api/tickets', ticketRouter)
 app.use('/api/gate', gateRouter)
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta:${PORT}`)
-})
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta:${PORT}`)
+  })
+}
+
+export { app }

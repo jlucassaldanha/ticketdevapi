@@ -160,3 +160,14 @@ Atuou estritamente como uma ferramenta de Pair Programming para suporte técnico
 Cada linha de código foi revisada e compreendida detalhadamente pelo candidato, garantindo domínio total sobre os fluxos de dados, regras de concorrência de ingressos, geração de HMAC e simulação de pagamentos.
 * **Craftsmanship Humano:** 
 Todas as decisões finais de organização de diretórios, decisões arquiteturais, regras de fluxo de caixa simulado de pagamentos e a estruturação de injeção manual de dependências foram arquitetadas e executadas manualmente por mim. O cérebro do projeto manteve-se 100% humano, garantindo um código limpo, legível e de altíssima fidelidade às boas práticas modernas de desenvolvimento web.
+
+## Testes
+
+criar .env.test com:
+
+DATABASE_URL="postgresql://dbuser:dbpassword@localhost:5432/db_name?schema=public"
+NODE_ENV="test"
+
+rode : docker exec -it ticketdev-postgres psql -U ticketuser -d ticketdev_db -c "CREATE DATABASE ticketdev_test_db;"
+
+rode: npx dotenv -e .env.test -- npx prisma db push 
