@@ -167,3 +167,54 @@ Atuou estritamente como uma ferramenta de Pair Programming para suporte técnico
 Cada linha de código foi revisada e compreendida detalhadamente pelo candidato, garantindo domínio total sobre os fluxos de dados, regras de concorrência de ingressos, geração de HMAC e simulação de pagamentos.
 * **Craftsmanship Humano:** 
 Todas as decisões finais de organização de diretórios, decisões arquiteturais, regras de fluxo de caixa simulado de pagamentos e a estruturação de injeção manual de dependências foram arquitetadas e executadas manualmente por mim. O cérebro do projeto manteve-se 100% humano, garantindo um código limpo, legível e de altíssima fidelidade às boas práticas modernas de desenvolvimento web.
+
+## 🧪 Configuração do Ambiente de Testes de Integração
+
+Siga o passo a passo abaixo para provisionar e executar a suíte de testes de integração do projeto em um ambiente isolado.
+
+---
+
+### 1. Criar o arquivo de variáveis de ambiente (`.env.test`)
+
+Crie o arquivo **`.env.test`** na raiz do projeto contendo as credenciais do banco de dados dedicado aos testes:
+
+```env
+DATABASE_URL="postgresql://ticketuser:ticketpassword@localhost:5432/ticketdev_test_db?schema=public"
+NODE_ENV="test"
+
+```
+
+> **Nota:** Certifique-se de que a `DATABASE_URL` no `.env.test` aponte para o banco de testes (`ticketdev_test_db`) para evitar a limpeza acidental de dados do banco de desenvolvimento.
+
+---
+
+### 2. Criar o Banco de Dados de Testes via Docker
+
+Com o container do PostgreSQL em execução, rode o comando abaixo para criar a base de dados `ticketdev_test_db`:
+
+```bash
+docker exec -it ticketdev-postgres psql -U ticketuser -d ticketdev_db -c "CREATE DATABASE ticketdev_test_db;"
+
+```
+
+---
+
+### 3. Sincronizar o Schema do Prisma
+
+Execute a migração das tabelas e enums do `schema.prisma` para o banco de testes recém-criado:
+
+```bash
+npx dotenv -e .env.test -- npx prisma db push
+
+```
+
+---
+
+### 4. Executar os Testes
+
+Com o banco sincronizado, execute a suíte de testes de integração com o comando:
+
+```bash
+npm run test
+
+```

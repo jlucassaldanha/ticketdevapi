@@ -1,10 +1,10 @@
-import { Event, Ticket } from "@prisma/client"
+import { Event, Ticket, TicketStatus } from "@prisma/client"
 
 export interface CreateTicketData {
   eventId: string
   clientId: string
   seatNumber?: string | null
-  status: string
+  status: TicketStatus
   secureHash: string
 }
 
@@ -19,6 +19,7 @@ export interface TicketWithEvent extends Ticket {
   event:  {
     title: string,
     date: Date,
-    location: string
+    location: string,
+    imageUrl: string,
   }
 }

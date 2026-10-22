@@ -30,7 +30,7 @@ export class EventController {
     try {
       const organizerId = req.user?.id
       if (!organizerId) {
-        return res.status(401).json({ error: 'Organizador não identificado na seção. '})
+        return res.status(401).json({ error: 'Organizador não identificado na seção.' })
       }
 
       const { externalId, date, location, capacity, price } = req.body
@@ -81,8 +81,7 @@ export class EventController {
       }
       if (error.message === 'UNAUTHORIZED_EVENT_ACCESS') {
         return res.status(403).json({ 
-          error: 'UNAUTHORIZED_EVENT_ACCESS',
-          message: 'Você não tem permissão para editar eventos de outros organizadores.' 
+          error: 'Você não tem permissão para editar eventos de outros organizadores.' 
         })
       }
       console.error('Falha ao atualizar evento:', error);
@@ -103,14 +102,12 @@ export class EventController {
       }
       if (error.message === 'EVENT_HAS_SOLD_TICKETS') {
         return res.status(400).json({
-          error: 'EVENT_HAS_SOLD_TICKETS',
-          message: 'Não é possível excluir um evento que já possui ingressos vendidos.',
+          error: 'Não é possível excluir um evento que já possui ingressos vendidos.',
         })
       }
       if (error.message === 'UNAUTHORIZED_EVENT_ACCESS') {
         return res.status(403).json({ 
-          error: 'UNAUTHORIZED_EVENT_ACCESS',
-          message: 'Você não tem permissão para excluir eventos de outros organizadores.' 
+          error: 'Você não tem permissão para excluir eventos de outros organizadores.' 
         })
       }
       console.error('Falha ao excluir evento:', error)

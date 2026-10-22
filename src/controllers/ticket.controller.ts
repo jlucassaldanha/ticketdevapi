@@ -46,8 +46,7 @@ export class TicketController {
       }
       if (error.message === 'PAYMENT_REFUSED') {
         return res.status(402).json({ 
-          error: 'PAGAMENTO_RECUSADO',
-          message: 'A operadora financeira recusou a transação. Verifique os dados do cartão de crédito simulado.' 
+          error: 'A operadora financeira recusou a transação. Verifique os dados do cartão de crédito simulado.' 
         })
       }
       console.error('Falha ao processar a reserva:', error)

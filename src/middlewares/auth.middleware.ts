@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
-import { AuthenticatedRequest, UserRole } from "../types/user";
+import { AuthenticatedRequest } from "../types/user";
 import jwt from 'jsonwebtoken'
+import { Role } from '@prisma/client';
 
 export function authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   const authHeader = req.headers.authorization
@@ -21,7 +22,7 @@ export function authMiddleware(req: AuthenticatedRequest, res: Response, next: N
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET || 'fallback_secret_ticket_dev'
-    ) as { userId: string; role: UserRole}
+    ) as { userId: string; role: Role}
 
     req.user = {
       id: decoded.userId,
@@ -34,7 +35,7 @@ export function authMiddleware(req: AuthenticatedRequest, res: Response, next: N
   }
 }
 
-export function roleMiddleware(allowedRoles: UserRole[]) {
+export function roleMiddleware(allowedRoles: Role[]) {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Usuário não autenticado.' })
