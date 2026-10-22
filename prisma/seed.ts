@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient, Role, TicketStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import pg from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -60,6 +60,14 @@ async function main() {
     })
   }
 
+  const client1 = await prisma.user.findUnique({
+    where: { email: 'cliente1@ticketdev.com' },
+  })
+
+  if (!client1) {
+    throw new Error('Consumidor principal não encontrado para associar os ingressos.')
+  }
+
   const cinemaEvents = [
     {
       id: 'a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d',
@@ -100,6 +108,19 @@ async function main() {
       price: 40.00,
       ticketsSold: 0,
     },
+    {
+      id: 'g545ytf65-756hh-65hh7-hr56-6y65hh767', 
+      title: 'Pulp Fiction: Tempo de Violência (1994)',
+      description: 'Vincent Vega e Jules Winnfield são dois assassinos profissionais que trabalham fazendo cobranças para Marsellus Wallace, um poderosos gângster. Vega é forçado a sair com a garota do chefe, temendo passar dos limites. Enquanto isso, o pugilista Butch Coolidge se mete em apuros por ganhar uma luta que deveria perder.',
+      imageUrl: 'https://image.tmdb.org/t/p/w1280/tptjnB2LDbuUWya9Cx5sQtv5hqb.jpg',
+      externalId: '2341243', 
+      category: 'Cinema',
+      date: new Date('2026-11-12T18:30:00Z'),
+      location: 'Cinema Ficticio 4',
+      capacity: 150,
+      price: 40.00,
+      ticketsSold: 0,
+    },
   ]
 
   for (const event of cinemaEvents) {
@@ -112,6 +133,41 @@ async function main() {
           connect: { id: organizer.id },
         },
       },
+    });
+  }
+
+  const tickets = [
+    {
+      id: '11111111-1111-1111-1111-111111111111',
+      eventId: cinemaEvents[0].id,
+      clientId: client1.id,
+      seatNumber: 'A01',
+      status: TicketStatus.ACTIVE, 
+      secureHash: 'hash-ingresso-ativo-001',
+    },
+    {
+      id: '22222222-2222-2222-2222-222222222222',
+      eventId: cinemaEvents[0].id,
+      clientId: client1.id,
+      seatNumber: 'A02',
+      status: TicketStatus.USED, 
+      secureHash: 'hash-ingresso-usado-002',
+    },
+    {
+      id: '33333333-3333-3333-3333-333333333333',
+      eventId: cinemaEvents[1].id,
+      clientId: client1.id,
+      seatNumber: 'B05',
+      status: TicketStatus.CANCELLED, 
+      secureHash: 'hash-ingresso-cancelado-003',
+    },
+  ];
+
+  for (const ticket of tickets) {
+    await prisma.ticket.upsert({
+      where: { id: ticket.id },
+      update: {},
+      create: ticket,
     });
   }
 
