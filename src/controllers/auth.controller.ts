@@ -12,7 +12,7 @@ export class AuthController {
       const { email, name, password, role } = req.body;
 
       if (!email || !name || !password || !role) {
-        return res.status(400).json({ error: "Todos os campos são obrigatórios"})
+        return res.status(400).json({ error: "Todos os campos são obrigatórios."})
       }
 
       if (typeof role !== 'string') {
@@ -24,7 +24,7 @@ export class AuthController {
       const validRoles = Object.values(Role)
       if (!validRoles.includes(roleUpper as Role)) {
         return res.status(400).json({
-          error: `Cargo inválido. Cargos permitidos: ${validRoles.join(', ')}`
+          error: `Cargo inválido.`
         })
       }
 
