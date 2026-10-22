@@ -62,7 +62,7 @@ export class EventService implements IEventService {
     if (event.organizerId !== organizerId) {
       throw new Error('UNAUTHORIZED_EVENT_ACCESS');
     }
-
+    
     if (event.ticketsSold > 0) {
       throw new Error('EVENT_HAS_SOLD_TICKETS')
     }
